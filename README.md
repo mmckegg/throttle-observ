@@ -9,8 +9,6 @@ Throttles [observ](https://github.com/raynos/observ) object broadcast to specifi
 
 ```js
 var Observ = require('observ')
-var ThrottleObserv = require('throttle-observ')
-
 var source = Observ()
 setInterval(function () {
   // set every 10 ms
@@ -18,9 +16,18 @@ setInterval(function () {
 }, 10)
 
 var minDelayMs = 100
-var throttled = ThrottleObserv(source, minDelayMs)
 
+// create sub observable
+var ThrottleObserv = require('throttle-observ')
+var throttled = ThrottleObserv(source, minDelayMs)
 throttled(function (value) {
+  // only broadcast every 100 ms
+  console.log(value)
+})
+
+// or watch
+var throttledWatch = require('throttle-observ/watch')
+var release = throttledWatch(source, minDelayMs, function (value) {
   // only broadcast every 100 ms
   console.log(value)
 })
